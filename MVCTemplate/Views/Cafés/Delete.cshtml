@@ -1,0 +1,68 @@
+﻿@model MVCTemplate.Models.Cafés
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.IDcafé)
+    @Html.HiddenFor(model => model.FechaModificacion)
+    <div>
+        <h4>Cafés</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Nombre)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Regular)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Regular)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Grande)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Grande)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Rocas)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Rocas)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Frappe)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Frappe)
+            </dd>
+        </dl>
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" />
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>
+}

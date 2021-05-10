@@ -1,0 +1,75 @@
+﻿@model IEnumerable<MVCTemplate.Models.Cafés>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table id="DT_Cafés" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Regular)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Grande)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rocas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Frappe)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tbody>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Regular)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Grande)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rocas)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Frappe)
+                    @Html.HiddenFor(modelItem => item.FechaModificacion)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.IDcafé }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.IDcafé }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.IDcafé })
+                </td>
+            </tr>
+        </tbody>
+    }
+
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('#DT_Cafés').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf'
+            ]
+        });
+    });
+</script>

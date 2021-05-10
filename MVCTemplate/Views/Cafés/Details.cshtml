@@ -1,0 +1,59 @@
+﻿@model MVCTemplate.Models.Cafés
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Cafés</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Regular)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Regular)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Grande)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Grande)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Rocas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Rocas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Frappe)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Frappe)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IDcafé }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
