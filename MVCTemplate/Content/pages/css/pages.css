@@ -3243,7 +3243,7 @@ h5 {
 */
 a {
     text-shadow: none !important;
-    color: #584b8d;
+    color: #6b5c41;
     transition: color 0.1s linear 0s, background-color 0.1s linear 0s, opacity 0.2s linear 0s !important;
 }
 
@@ -3492,7 +3492,7 @@ hr {
 }
 
 .bg-primary-dark {
-    background-color: #584b8d;
+    background-color: #6b5c41;
 }
 
 .bg-primary-darker {
@@ -3500,7 +3500,7 @@ hr {
 }
 
 .bg-primary-light {
-    background-color: #8a7dbe !important;
+    background-color: #875f39 !important;
 }
 
 .bg-primary-lighter {
@@ -4105,22 +4105,22 @@ Alternate buttons
     .btn-primary:active:focus,
     .btn-primary:active:hover,
     .show .dropdown-toggle.btn-primary {
-        background-color: #584b8d;
-        border-color: #584b8d;
+        background-color: #6b5c41;
+        border-color: #6b5c41;
         color: #fff;
     }
 
     .btn-primary.hover,
     .btn-primary:hover,
     .show .dropdown-toggle.btn-primary {
-        background-color: #8a7dbe;
-        border-color: #8a7dbe;
+        background-color: #875f39;
+        border-color: #875f39;
         color: #fff;
     }
 
     .btn-primary.active:hover {
-        background: #5e4f96;
-        border-color: #5e4f96;
+        background: #96804f;
+        border-color: #96804f;
     }
 
     .btn-primary.disabled,
