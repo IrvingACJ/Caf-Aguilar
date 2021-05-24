@@ -22,9 +22,9 @@ namespace MVCTemplate.Controllers
         // GET: Postres/Details/5
         public ActionResult Details(int id)
         {
-            var user = db.Postres.Where(
+            var postre = db.Postres.Where(
                 u => u.IDpostre == id).FirstOrDefault();
-            return View();
+            return View(postre);
         }
 
         // GET: Postres/Create
@@ -83,7 +83,7 @@ namespace MVCTemplate.Controllers
                 {
                     db.Entry(postre).State = EntityState.Modified;
                     await db.SaveChangesAsync();
-                    return RedirectToAction("Index", "Users");
+                    return RedirectToAction("Index");
                 }
                 return RedirectToAction("Index");
             }
@@ -109,11 +109,13 @@ namespace MVCTemplate.Controllers
         {
             try
             {
+                var delpostre = db.Postres.Where(
+                    u => u.IDpostre == postre.IDpostre).FirstOrDefault();
                 // TODO: Add update logic here
                 if (ModelState.IsValid)
                 {
-                    db.Entry(postre).State = EntityState.Deleted;
-                    db.Postres.Remove(postre);
+                    db.Entry(delpostre).State = EntityState.Deleted;
+                    db.Postres.Remove(delpostre);
                     await db.SaveChangesAsync();
                     return RedirectToAction("Index", new { message = "Postre Eliminado" });
                 }
