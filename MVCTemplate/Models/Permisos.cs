@@ -26,5 +26,7 @@ namespace MVCTemplate.Models
 
         [StringLength(1)]
         public string P5 { get; set; }
+
+        public virtual Usuarios Usuarios { get; set; }
     }
 }

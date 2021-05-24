@@ -18,9 +18,6 @@ namespace MVCTemplate.Models
         [StringLength(50)]
         public string Contraseña { get; set; }
 
-        internal string Encriptar(string contraseña)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual Permisos Permisos { get; set; }
     }
 }

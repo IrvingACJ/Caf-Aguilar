@@ -12,14 +12,13 @@
 {
     @Html.AntiForgeryToken()
 
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.IDcafé)
-    @Html.HiddenFor(model => model.FechaModificacion)
     <div>
         <h4>Cafés</h4>
         <hr />
         <dl class="dl-horizontal">
+
             <dt>
+                @Html.HiddenFor(model => model.IDcafé)
                 @Html.DisplayNameFor(model => model.Nombre)
             </dt>
 
@@ -28,41 +27,37 @@
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.Regular)
+                @Html.DisplayNameFor(model => model.Tamaños.Tamaño)
             </dt>
 
             <dd>
-                @Html.DisplayFor(model => model.Regular)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Grande)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Grande)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Rocas)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Rocas)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Frappe)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Frappe)
+                @Html.HiddenFor(model => model.IDtamaño)
+                @Html.DisplayFor(model => model.Tamaños.Tamaño)
             </dd>
         </dl>
-
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" />
+            <button class="btn btn-danger" onclick="Borrar()">Borrar</button>
             @Html.ActionLink("Back to List", "Index")
         </div>
     </div>
+
+    <script>
+        function Borrar() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Delete2", "Cafés")',
+                data: { IDcafé: $('#IDcaf_').val()},
+                success: function (response) {
+                    window.location.href = response;
+                },
+                error: function (exception) {
+                    console.log("error" + exception);
+                }
+            });
+        }
+    </script>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }

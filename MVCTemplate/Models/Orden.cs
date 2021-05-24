@@ -9,6 +9,13 @@ namespace MVCTemplate.Models
     [Table("Orden")]
     public partial class Orden
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Orden()
+        {
+            DetallesOrdenCafés = new HashSet<DetallesOrdenCafés>();
+            DetallesOrdenPostres = new HashSet<DetallesOrdenPostres>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int IDorden { get; set; }
@@ -17,5 +24,11 @@ namespace MVCTemplate.Models
 
         [Column(TypeName = "money")]
         public decimal? total { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DetallesOrdenCafés> DetallesOrdenCafés { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DetallesOrdenPostres> DetallesOrdenPostres { get; set; }
     }
 }

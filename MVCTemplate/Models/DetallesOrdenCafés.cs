@@ -6,20 +6,26 @@ namespace MVCTemplate.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("DetallesOrden")]
-    public partial class DetallesOrden
+    public partial class DetallesOrdenCafés
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ID { get; set; }
 
         public int? IDorden { get; set; }
 
-        [StringLength(10)]
-        public string IDcafépostres { get; set; }
+        public int? IDcafé { get; set; }
 
         public int? Cantidad { get; set; }
 
-        [StringLength(10)]
-        public string Tipo { get; set; }
+        [Column(TypeName = "money")]
+        public decimal? Extras { get; set; }
+
+        public int? IDtipo { get; set; }
+
+        public virtual Cafés Cafés { get; set; }
+
+        public virtual Orden Orden { get; set; }
+
+        public virtual Tipos Tipos { get; set; }
     }
 }

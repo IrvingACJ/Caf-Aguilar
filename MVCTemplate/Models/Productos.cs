@@ -17,5 +17,7 @@ namespace MVCTemplate.Models
 
         [Column(TypeName = "money")]
         public decimal? Precio { get; set; }
+
+        public virtual Inventario Inventario { get; set; }
     }
 }
