@@ -6,7 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-
+using System.Text;
+using Newtonsoft.Json;
 namespace MVCTemplate.Controllers
 {
     public class CafésController : Controller
@@ -20,7 +21,7 @@ namespace MVCTemplate.Controllers
         }
 
         // GET: Cafés/Details/5
-        public ActionResult Details(string id)
+        public ActionResult Details(int id)
         {
             var cafés = db.Cafés.Where(
                 u => u.IDcafé == id).FirstOrDefault();
@@ -33,43 +34,74 @@ namespace MVCTemplate.Controllers
             return View();
         }
 
-        // POST: Cafés/Create
-        [HttpPost]
-        public async Task<ActionResult> Create([Bind(Include =
-            "IDcafé,Nombre,Regular, Grande,Rocas, Frappe, FechaModificacion")] Cafés café)
+        public ActionResult Create2(string nombre, int id_tamaño)
         {
+            var lastRecord = db.Cafés.OrderByDescending(u => u.IDcafé).FirstOrDefault();
+            var New_Café = new Cafés();
             try
             {
-                if (ModelState.IsValid)
-                {
-                    var lastRecord = db.Cafés.OrderByDescending
-                      (u => u.FechaModificacion).FirstOrDefault();
-                    if (lastRecord != null)
-                    {
-                        string ID = lastRecord.IDcafé.Replace("C", "");
-                        int newint = Convert.ToInt32(ID) + 1;
-                        café.IDcafé = newint + "C";
-                    }
-                    else
-                    {
-                        café.IDcafé = "0C";
-                    }
-                    café.FechaModificacion = DateTime.Now;
-                    db.Cafés.Add(café);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
-                }
+                if (lastRecord == null)
+                { New_Café.IDcafé = 0; }
+                else
+                { New_Café.IDcafé = lastRecord.IDcafé + 1; }
+                New_Café.Nombre = nombre;
+                New_Café.IDtamaño = id_tamaño;
+                db.Cafés.Add(New_Café);
+                db.SaveChanges();
+                return Content(Url.Action("Index", new { message = "Café Agregado" }));
+                
             }
             catch (Exception ex)
             {
-                var exception = ex.ToString();
-                return RedirectToAction("Index", new { message = "Error: " + exception });
+                return View("Error: "+ex);
             }
-            return View();
         }
 
+        public ActionResult GetList()
+        {
+            var tam = from entry in db.Tamaños.AsEnumerable()
+            select new {
+                entry.IDtamaño,
+                entry.Tamaño};
+            tam = tam.ToList();
+            var json = JsonConvert.SerializeObject(tam,Formatting.None);
+            return Json(json);
+        }
+
+        // POST: Cafés/Create
+        //[HttpPost]
+        //public async Task<ActionResult> Create([Bind(Include =
+        //    "IDcafé,Nombre,Regular, Grande,Rocas, Frappe, FechaModificacion")] Cafés café)
+        //{
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            var lastRecord = db.Cafés.OrderByDescending
+        //              (u => u).FirstOrDefault();
+        //            if (lastRecord != null)
+        //            {
+        //                café.IDcafé = 0;
+        //            }
+        //            else
+        //            {
+        //                café.IDcafé += 1;
+        //            }
+        //            db.Cafés.Add(café);
+        //            await db.SaveChangesAsync();
+        //            return RedirectToAction("Index");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var exception = ex.ToString();
+        //        return RedirectToAction("Index", new { message = "Error: " + exception });
+        //    }
+        //    return View();
+        //}
+
         // GET: Cafés/Edit/5
-        public ActionResult Edit(string id, string message = "")
+        public ActionResult Edit(int id, string message = "")
         {
             var user = db.Cafés.Where(
                 u => u.IDcafé == id).FirstOrDefault();
@@ -77,22 +109,20 @@ namespace MVCTemplate.Controllers
             return View(user);
         }
 
-        // POST: Cafés/Edit/5
-        [HttpPost]
-        public async Task<ActionResult> Edit([Bind(Include =
-            "IDcafé,Nombre,Regular, Grande,Rocas, Frappe, FechaModificacion")]Cafés café)
+        public ActionResult Edit2(int IDcafé, string nombre, int id_tamaño)
         {
+            var lastRecord = db.Cafés.Where
+              (u => u.IDcafé == IDcafé).FirstOrDefault();
             try
             {
-                // TODO: Add update logic here
-                if (ModelState.IsValid)
-                {
-                    café.FechaModificacion = DateTime.Now;
-                    db.Entry(café).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Index");
-                }
-                return RedirectToAction("Index");
+                db.Entry(lastRecord).State = EntityState.Deleted;
+                db.Cafés.Remove(lastRecord);
+                db.SaveChanges();
+                lastRecord.Nombre = nombre;
+                lastRecord.IDtamaño = id_tamaño;
+                db.Cafés.Add(lastRecord);
+                db.SaveChanges();
+                return Content(Url.Action("Index", new { message = "Café Eliminado" }));
             }
             catch (Exception ex)
             {
@@ -102,31 +132,23 @@ namespace MVCTemplate.Controllers
         }
 
         // GET: Cafés/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult Delete(int id)
         {
             var café = db.Cafés.Where(
                 u => u.IDcafé == id).FirstOrDefault();
             return View(café);
         }
 
-        // POST: Cafés/Delete/5
-        [HttpPost]
-        public async Task<ActionResult> Delete([Bind(Include =
-            "IDcafé,Nombre,Regular, Grande,Rocas, Frappe, FechaModificacion")]Cafés café)
+        public ActionResult Delete2(int IDcafé)
         {
+            var lastRecord = db.Cafés.Where
+              (u => u.IDcafé == IDcafé).FirstOrDefault();
             try
             {
-                var lastRecord = db.Cafés.Where
-                  (u => u.IDcafé == café.IDcafé).FirstOrDefault();
-                // TODO: Add update logic here
-                if (ModelState.IsValid)
-                {
-                    db.Entry(lastRecord).State = EntityState.Deleted;
-                    db.Cafés.Remove(lastRecord);
-                    await db.SaveChangesAsync();
-                    return RedirectToAction("Index", new { message = "Café Eliminado" });
-                }
-                return RedirectToAction("Index", new { message = "Error" });
+                db.Entry(lastRecord).State = EntityState.Deleted;
+                db.Cafés.Remove(lastRecord);
+                db.SaveChangesAsync();
+                return Content(Url.Action("Index", new { message = "Café Eliminado" }));
             }
             catch (Exception ex)
             {

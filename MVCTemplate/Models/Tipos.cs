@@ -6,27 +6,26 @@ namespace MVCTemplate.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Postres
+    public partial class Tipos
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Postres()
+        public Tipos()
         {
-            DetallesOrdenPostres = new HashSet<DetallesOrdenPostres>();
+            DetallesOrdenCafés = new HashSet<DetallesOrdenCafés>();
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int IDpostre { get; set; }
+        public int IDtipo { get; set; }
 
+        [Required]
         [StringLength(50)]
-        public string Nombre { get; set; }
+        public string Tipo { get; set; }
 
         [Column(TypeName = "money")]
-        public decimal? Precio { get; set; }
-
-        public DateTime? FechaModificacion { get; set; }
+        public decimal Precio { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetallesOrdenPostres> DetallesOrdenPostres { get; set; }
+        public virtual ICollection<DetallesOrdenCafés> DetallesOrdenCafés { get; set; }
     }
 }

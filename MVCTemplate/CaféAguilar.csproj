@@ -142,21 +142,24 @@
     <Compile Include="Controllers\CafésController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\PostresController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Cafés.cs" />
-    <Compile Include="Models\DetallesOrden.cs" />
+    <Compile Include="Models\DetallesOrdenCafés.cs" />
+    <Compile Include="Models\DetallesOrdenPostres.cs" />
     <Compile Include="Models\Inventario.cs" />
     <Compile Include="Models\ModelBD.cs" />
     <Compile Include="Models\Orden.cs" />
-    <Compile Include="Models\Ordenes_View.cs" />
     <Compile Include="Models\Permisos.cs" />
     <Compile Include="Models\Postres.cs" />
     <Compile Include="Models\PowerDusuarios.cs" />
     <Compile Include="Models\ProductoInventario_view.cs" />
     <Compile Include="Models\Productos.cs" />
+    <Compile Include="Models\Tamaños.cs" />
+    <Compile Include="Models\Tipos.cs" />
     <Compile Include="Models\Usuarios.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -1799,9 +1802,14 @@
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Cafés\Index.cshtml" />
     <Content Include="Views\Cafés\Create.cshtml" />
-    <Content Include="Views\Cafés\Delete.cshtml" />
     <Content Include="Views\Cafés\Details.cshtml" />
+    <Content Include="Views\Cafés\Delete.cshtml" />
     <Content Include="Views\Cafés\Edit.cshtml" />
+    <Content Include="Views\Postres\Index.cshtml" />
+    <Content Include="Views\Postres\Create.cshtml" />
+    <Content Include="Views\Postres\Delete.cshtml" />
+    <Content Include="Views\Postres\Edit.cshtml" />
+    <Content Include="Views\Postres\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
