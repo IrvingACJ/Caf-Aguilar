@@ -6,7 +6,7 @@ namespace MVCTemplate.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class DetallesOrdenPostres
+    public partial class DetallesOrdenPostre
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ID { get; set; }
@@ -19,6 +19,6 @@ namespace MVCTemplate.Models
 
         public virtual Orden Orden { get; set; }
 
-        public virtual Postres Postres { get; set; }
+        public virtual Postre Postre { get; set; }
     }
 }

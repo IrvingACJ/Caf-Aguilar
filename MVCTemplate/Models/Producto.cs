@@ -6,7 +6,8 @@ namespace MVCTemplate.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Productos
+    [Table("Productos")]
+    public partial class Producto
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

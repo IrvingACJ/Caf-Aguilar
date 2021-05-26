@@ -1,0 +1,144 @@
+﻿
+@{
+    ViewBag.Title = "NuevaOrden";
+}
+
+<h2>NuevaOrden</h2>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-1">
+            <span class="font-montserrat fs-15 semi-bold" style="text-align:center">Producto</span>
+        </div>
+        <div class="col-8">
+            <input type="text" id="txtProductID" name="idProducto" placeholder="ID del Producto" class="form-control full-width" />
+        </div>
+        <div class="col-3">
+            <button id="btnAgregar" class="btn btn-primary full-width">Agregar</button>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12">
+            <table id="tablaOrden" class="table table-active full-width">
+                <thead>
+                    <tr>
+                        <th>
+                            Producto
+                        </th>
+                        <th>
+                            Precio
+                        </th>
+                        <th style="text-align:center">
+                            Opciones
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <span class="bold pull-right">Total: $<span id="lblTotal">0</span></span>
+                        </th>
+                        <th></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <button class="btn btn-block btn-primary" id="btnGenerar">Generar Orden</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#btnAgregar').click(agregarAOrden);
+        $('#txtProductID').keypress(function (e) {
+            if (e.keyCode == 13)
+                agregarAOrden();
+        });
+        var table = $('#tablaOrden').DataTable({
+            pageLength: 5,
+            lengthMenu: [5,10,20],
+            dom: 'fltip',
+            columns: [
+                {
+                    data: 'Nombre'
+                },
+                {
+                    data: 'Precio',
+                    render: function (data) {
+                        return "$" + data;
+                    }
+                },
+                {
+                    data: null,
+                    render: function () {
+                        return '<button class="btn m-0 p-0 btn-link full-width text-danger remove"><i class="fa fa-minus"></i></button>'
+                    }
+                }
+            ]
+        });
+
+        $('#btnGenerar').click(function () {
+            var resumen = {
+                productos: table.data().toArray(),
+                total: parseFloat($('#lblTotal').text())
+            };
+            console.log(resumen);
+            $.post('@Url.Action("CrearOrden", "Orden")', { data: JSON.stringify(resumen) },
+                function (data, status) {
+                    if (data == 'OK') {
+                        table.rows().remove().draw(true);
+                        $('body').pgNotification({ style: 'flip', message: 'Orden generada', type: 'success' }).show();
+
+                    }
+                }
+            ).fail(function (err) {
+                $('body').pgNotification({ style: 'flip', message: err.responseText, type: 'danger' }).show();
+
+            });
+        });
+
+        table.on('click', '.remove', function () {
+            table
+                .row($(this).parents('tr'))
+                .remove()
+                .draw();
+            var total = 0;
+            table.data().each(function (item) {
+                var precio = parseFloat(item.Precio);
+                total += precio;
+            });
+            $('#lblTotal').text(total);
+            console.log(table.data().toArray());
+        });
+
+    });
+
+    function agregarAOrden() {
+        var id = parseInt($('#txtProductID').val().trim());
+        $('#txtProductID').val('');
+        var table = $('#tablaOrden').DataTable();
+        $.get('@Url.Action("getDetallesPostre","Postres")', { Id: id }, function (data, status) {
+            if (data.status == 'OK') {
+                table.row.add({ Nombre: data.info.Nombre, Precio: data.info.Precio, Id: id }).draw(true);
+                var total = 0;
+                table.data().each(function (item) {
+                    var precio = parseFloat(item.Precio);
+                    total += precio;
+                });
+
+                $('#lblTotal').text(total);
+            }
+            else {
+                $('body').pgNotification({style:'flip', message:'Producto no encontrado', type:'danger'}).show();
+            }
+        }).fail(function (err) {
+            $('body').pgNotification({ stUrllUrl: 'flip', message: err.responseText, type: 'danger' });
+
+        });
+    }
+</script>

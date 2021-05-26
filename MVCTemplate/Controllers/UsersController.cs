@@ -13,7 +13,7 @@ namespace MVCTemplate.Controllers
     public class UsersController : Controller
     {
         // GET: Users
-        ModelBD db = new ModelBD();
+        CafeAguilarDB db = new CafeAguilarDB();
         ClsPwd PWD = new ClsPwd();
         public ActionResult Index()
         {
@@ -37,7 +37,7 @@ namespace MVCTemplate.Controllers
 
         [HttpPost]
         public async Task<ActionResult> Create([Bind(Include =
-            "IDusuario,Nombre,Contraseña")] Usuarios user)
+            "IDusuario,Nombre,Contraseña")]Usuario user)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace MVCTemplate.Controllers
 
         [HttpPost]
         public async Task<ActionResult> Edit([Bind(Include =
-            "IDusuario,Nombre,Contraseña")]Usuarios user)
+            "IDusuario,Nombre,Contraseña")]Usuario user)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace MVCTemplate.Controllers
 
         [HttpPost]
         public async Task<ActionResult> Delete([Bind(Include =
-            "IDusuario,Nombre,Contraseña")]Usuarios user)
+            "IDusuario,Nombre,Contraseña")]Usuario user)
         {
             try
             {

@@ -13,7 +13,7 @@ namespace MVCTemplate.Models
         public Orden()
         {
             DetallesOrdenCafés = new HashSet<DetallesOrdenCafés>();
-            DetallesOrdenPostres = new HashSet<DetallesOrdenPostres>();
+            DetallesOrdenPostres = new HashSet<DetallesOrdenPostre>();
         }
 
         [Key]
@@ -29,6 +29,6 @@ namespace MVCTemplate.Models
         public virtual ICollection<DetallesOrdenCafés> DetallesOrdenCafés { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetallesOrdenPostres> DetallesOrdenPostres { get; set; }
+        public virtual ICollection<DetallesOrdenPostre> DetallesOrdenPostres { get; set; }
     }
 }

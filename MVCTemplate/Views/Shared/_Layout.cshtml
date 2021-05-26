@@ -49,25 +49,39 @@
                 <!-- BEGIN SIDEBAR MENU ITEMS-->
                 <ul class="menu-items">
                     <li class="m-t-30 ">
-                        <a href="@Url.Action("Index", "Home")" class="detailed">
+                        <a href="@Url.Action("NuevaOrden", "Orden")" class="detailed">
                             <span class="title">Inicio</span>
                             <span class="details">@*comentarios*@</span>
                         </a>
                         <span id="spanHome" class="icon-thumbnail"><i class="pg-home"></i></span>
                     </li>
-                    <li class="m-t-30 ">
-                        <a href="@Url.Action("Index", "Cafés")"  class="detailed">
+                    <li class="">
+                        <a href="javascrit:;"  class="detailed">
                             <span class="title">Cafés y Postres</span>
                             <span class="details">Registros</span>
                         </a>
-                        <span id="spanHome" class="icon-thumbnail"><i class="pg-home"></i></span>
+                        <span id="spanHome" class="icon-thumbnail"><i class="fa fa-hand-peace"></i></span>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="@Url.Action("Index","Cafés")">
+                                    <span class="title">Cafés</span>
+                                </a>
+                                <span class="icon-thumbnail"><i class="fa fa-coffee"></i></span>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index","Postres")">
+                                    <span class="title">Postres</span>
+                                </a>
+                                <span class="icon-thumbnail"><i class="fa fa-birthday-cake"></i></span>
+                            </li>
+                        </ul>
                     </li>
                     <li>
-                        <a href="@Url.Action("Index", "Users")" class="detailed">
-                            <span class="title">Productos</span>
+                        <a href="@Url.Action("Index", "Orden")" class="detailed">
+                            <span class="title">Ordenes</span>
                             <span class="details">@*comentarios*@</span>
                         </a>
-                        <span id="spanProductos" class="icon-thumbnail"><i class="pg-grid"></i></span>
+                        <span id="spanProductos" class="icon-thumbnail"><i class="fa fa-clipboard-list"></i></span>
                     </li>
                     <li>
                         <a href="@Url.Action("Index", "Users")" class="detailed">
@@ -104,7 +118,7 @@
                 <div class="full-width  center ">
                     @*<div class="brand inline>*@
                     <a href="@Url.Action("Index", "Home")">
-                        <img class="" style=" display: block; margin-left: auto; margin-right: auto;" src="@Url.Content("~/Content/img/logo.png")" alt="logo" data-src="@Url.Content("~/Content/img/logo.png")" data-src-retina="@Url.Content("~/Content/img/logo.png")" width="400" height="120">
+                        <img class=""  style="display:block; margin-left: auto; margin-right: auto;" src="@Url.Content("~/Content/img/logo.png")" alt="logo" data-src="@Url.Content("~/Content/img/logo.png")" data-src-retina="@Url.Content("~/Content/img/logo.png")" width="400" height="120">
                     </a>
                     @*</div>*@
 

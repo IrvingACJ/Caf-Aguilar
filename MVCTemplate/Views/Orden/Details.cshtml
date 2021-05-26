@@ -1,0 +1,79 @@
+﻿@model IEnumerable<MVCTemplate.Models.DetallesOrdenPostre>
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table" id="tableRes">
+    <thead>
+        <tr>
+            <th>
+                Orden
+            </th>
+            <th>
+                Postre
+            </th>
+            <th>
+                Cantidad
+            </th>
+            <th>
+                Total
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Orden.IDorden)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Postre.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cantidad)
+                </td>
+                <td>
+                    $@(item.Cantidad * item.Postre.Precio)
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+            <th>
+                <span class="bold pull-right">Total: $<span id="lblTotal">0</span></span>
+            </th>
+        </tr>
+    </tfoot>
+
+</table>
+
+<script>
+    $(document).ready(function () {
+        var table = $('#tableRes').DataTable({
+            dom: 'Bfltp'
+        });
+        var arr = table.data().toArray();
+        var total = 0;
+        for (var i in arr) {
+            var p = parseFloat(arr[i][3].toString().substring(1));
+            total += p;
+        }
+        $('#lblTotal').text(total)
+    });
+</script>

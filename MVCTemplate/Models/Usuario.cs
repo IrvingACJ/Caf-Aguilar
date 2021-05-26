@@ -6,7 +6,7 @@ namespace MVCTemplate.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Usuarios
+    public partial class Usuario
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -18,6 +18,6 @@ namespace MVCTemplate.Models
         [StringLength(50)]
         public string Contraseña { get; set; }
 
-        public virtual Permisos Permisos { get; set; }
+        public virtual Permiso Permiso { get; set; }
     }
 }

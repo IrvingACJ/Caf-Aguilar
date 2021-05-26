@@ -13,7 +13,7 @@ namespace MVCTemplate.Controllers
     public class CafésController : Controller
     {
         // GET: Cafés
-        ModelBD db = new ModelBD();
+        CafeAguilarDB db = new CafeAguilarDB();
         public ActionResult Index()
         {
             var cafés = db.Cafés.ToList();

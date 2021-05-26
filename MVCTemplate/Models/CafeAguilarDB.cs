@@ -5,24 +5,26 @@ using System.Linq;
 
 namespace MVCTemplate.Models
 {
-    public partial class ModelBD : DbContext
+    public partial class CafeAguilarDB : DbContext
     {
-        public ModelBD()
-            : base("name=Model1")
+        public CafeAguilarDB()
+            : base("name=CafeAguilarDB")
         {
         }
+
         public virtual DbSet<Cafés> Cafés { get; set; }
         public virtual DbSet<DetallesOrdenCafés> DetallesOrdenCafés { get; set; }
-        public virtual DbSet<DetallesOrdenPostres> DetallesOrdenPostres { get; set; }
-        public virtual DbSet<Inventario> Inventario { get; set; }
-        public virtual DbSet<Orden> Orden { get; set; }
-        public virtual DbSet<Permisos> Permisos { get; set; }
-        public virtual DbSet<Postres> Postres { get; set; }
-        public virtual DbSet<Productos> Productos { get; set; }
+        public virtual DbSet<DetallesOrdenPostre> DetallesOrdenPostres { get; set; }
+        public virtual DbSet<Inventario> Inventarios { get; set; }
+        public virtual DbSet<Orden> Ordens { get; set; }
+        public virtual DbSet<Permiso> Permisos { get; set; }
+        public virtual DbSet<Postre> Postres { get; set; }
+        public virtual DbSet<Producto> Productos { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Tamaños> Tamaños { get; set; }
         public virtual DbSet<Tipos> Tipos { get; set; }
-        public virtual DbSet<Usuarios> Usuarios { get; set; }
-        public virtual DbSet<PowerDusuarios> PowerDusuarios { get; set; }
+        public virtual DbSet<Usuario> Usuarios { get; set; }
+        public virtual DbSet<PowerDusuario> PowerDusuarios { get; set; }
         public virtual DbSet<ProductoInventario_view> ProductoInventario_view { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -39,50 +41,50 @@ namespace MVCTemplate.Models
                 .Property(e => e.total)
                 .HasPrecision(19, 4);
 
-            modelBuilder.Entity<Permisos>()
+            modelBuilder.Entity<Permiso>()
                 .Property(e => e.P1)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Permisos>()
+            modelBuilder.Entity<Permiso>()
                 .Property(e => e.P2)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Permisos>()
+            modelBuilder.Entity<Permiso>()
                 .Property(e => e.P3)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Permisos>()
+            modelBuilder.Entity<Permiso>()
                 .Property(e => e.P4)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Permisos>()
+            modelBuilder.Entity<Permiso>()
                 .Property(e => e.P5)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Postres>()
+            modelBuilder.Entity<Postre>()
                 .Property(e => e.Nombre)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Postres>()
+            modelBuilder.Entity<Postre>()
                 .Property(e => e.Precio)
                 .HasPrecision(19, 4);
 
-            modelBuilder.Entity<Postres>()
+            modelBuilder.Entity<Postre>()
                 .HasMany(e => e.DetallesOrdenPostres)
-                .WithOptional(e => e.Postres)
+                .WithOptional(e => e.Postre)
                 .HasForeignKey(e => e.IDpostres);
 
-            modelBuilder.Entity<Productos>()
+            modelBuilder.Entity<Producto>()
                 .Property(e => e.Nombre)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Productos>()
+            modelBuilder.Entity<Producto>()
                 .Property(e => e.Precio)
                 .HasPrecision(19, 4);
 
-            modelBuilder.Entity<Productos>()
+            modelBuilder.Entity<Producto>()
                 .HasOptional(e => e.Inventario)
-                .WithRequired(e => e.Productos);
+                .WithRequired(e => e.Producto);
 
             modelBuilder.Entity<Tamaños>()
                 .Property(e => e.Tamaño)
@@ -101,43 +103,43 @@ namespace MVCTemplate.Models
                 .Property(e => e.Precio)
                 .HasPrecision(19, 4);
 
-            modelBuilder.Entity<Usuarios>()
+            modelBuilder.Entity<Usuario>()
                 .Property(e => e.Nombre)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Usuarios>()
+            modelBuilder.Entity<Usuario>()
                 .Property(e => e.Contraseña)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<Usuarios>()
-                .HasOptional(e => e.Permisos)
-                .WithRequired(e => e.Usuarios);
+            modelBuilder.Entity<Usuario>()
+                .HasOptional(e => e.Permiso)
+                .WithRequired(e => e.Usuario);
 
-            modelBuilder.Entity<PowerDusuarios>()
+            modelBuilder.Entity<PowerDusuario>()
                 .Property(e => e.Nombre)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<PowerDusuarios>()
+            modelBuilder.Entity<PowerDusuario>()
                 .Property(e => e.Contraseña)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<PowerDusuarios>()
+            modelBuilder.Entity<PowerDusuario>()
                 .Property(e => e.P1)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<PowerDusuarios>()
+            modelBuilder.Entity<PowerDusuario>()
                 .Property(e => e.P2)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<PowerDusuarios>()
+            modelBuilder.Entity<PowerDusuario>()
                 .Property(e => e.P3)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<PowerDusuarios>()
+            modelBuilder.Entity<PowerDusuario>()
                 .Property(e => e.P4)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<PowerDusuarios>()
+            modelBuilder.Entity<PowerDusuario>()
                 .Property(e => e.P5)
                 .IsUnicode(false);
 

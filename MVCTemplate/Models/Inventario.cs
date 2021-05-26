@@ -17,6 +17,6 @@ namespace MVCTemplate.Models
 
         public int? Minimo { get; set; }
 
-        public virtual Productos Productos { get; set; }
+        public virtual Producto Producto { get; set; }
     }
 }

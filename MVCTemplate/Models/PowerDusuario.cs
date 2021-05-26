@@ -6,11 +6,17 @@ namespace MVCTemplate.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Permisos
+    public partial class PowerDusuario
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int IDusuario { get; set; }
+
+        [StringLength(20)]
+        public string Nombre { get; set; }
+
+        [StringLength(50)]
+        public string Contraseña { get; set; }
 
         [StringLength(1)]
         public string P1 { get; set; }
@@ -26,7 +32,5 @@ namespace MVCTemplate.Models
 
         [StringLength(1)]
         public string P5 { get; set; }
-
-        public virtual Usuarios Usuarios { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace MVCTemplate.Controllers
 {
     public class PostresController : Controller
     {
-        ModelBD db = new ModelBD();
+        CafeAguilarDB db = new CafeAguilarDB();
         // GET: Postres
         public ActionResult Index()
         {
@@ -37,7 +37,7 @@ namespace MVCTemplate.Controllers
         // POST: Postres/Create
         [HttpPost]
         public async Task<ActionResult> Create([Bind(Include =
-            "IDpostre,Nombre,Precio")] Postres postre)
+            "IDpostre,Nombre,Precio")]Postre postre)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace MVCTemplate.Controllers
 
         [HttpPost]
         public async Task<ActionResult> Edit([Bind(Include =
-            "IDpostre,Nombre,Precio")] Postres postre)
+            "IDpostre,Nombre,Precio")]Postre postre)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace MVCTemplate.Controllers
         // POST: Postres/Delete/5
         [HttpPost]
         public async Task<ActionResult> Delete([Bind(Include =
-            "IDpostre,Nombre,Precio")] Postres postre)
+            "IDpostre,Nombre,Precio")]Postre postre)
         {
             try
             {
@@ -126,6 +126,23 @@ namespace MVCTemplate.Controllers
                 var exception = ex.ToString();
                 return RedirectToAction("Index", new { message = "Error: " + exception });
             }
+        }
+    
+        public ActionResult getDetallesPostre(int Id)
+        {
+            var postre = (from d in db.Postres.AsEnumerable()
+                         where d.IDpostre == Id
+                         select new
+                         {
+                             d.Nombre,
+                             d.Precio,
+                             Id = d.IDpostre
+                         }).FirstOrDefault();
+
+            return postre == null ? Json(new { status = "BAD" }, JsonRequestBehavior.AllowGet)
+                : Json(new { status = "OK", info = postre }, JsonRequestBehavior.AllowGet);
+
+            //return Json(postre.FirstOrDefault(), JsonRequestBehavior.AllowGet);
         }
     }
 }
