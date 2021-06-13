@@ -1,10 +1,9 @@
 ﻿@model IEnumerable<MVCTemplate.Models.Orden>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Ordenes";
 }
-
-<h2>Index</h2>
+<h1 class=" text-center" style="font-weight:500; font-family: 'Pattaya', sans-serif;">Ordenes</h1>
 
 <table class="table" id="tableRes">
     <thead>
@@ -15,21 +14,21 @@
             <th>
                 @Html.DisplayNameFor(model => model.total)
             </th>
-            <th></th>
+            <th> Opciones</th>
         </tr>
-
     </thead>
     <tbody>
-        @foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
             <tr>
                 <td>
-                   @item.Fecha
+                    @item.Fecha
                 </td>
                 <td>
                     @item.total
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "Details", new { id=item.IDorden })
+                    @Html.ActionLink("Details", "Details", new { id = item.IDorden })
                 </td>
             </tr>
         }
@@ -41,7 +40,10 @@
 <script>
     $(document).ready(function () {
         $('#tableRes').DataTable({
-            dom: 'Bfltp'
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf'
+            ]
         });
     });
 </script>

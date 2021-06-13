@@ -6,8 +6,14 @@ namespace MVCTemplate.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Usuario
+    public partial class Usuarios
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Usuarios()
+        {
+            Permisos_Usuarios = new HashSet<Permisos_Usuarios>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int IDusuario { get; set; }
@@ -18,6 +24,7 @@ namespace MVCTemplate.Models
         [StringLength(50)]
         public string Contraseña { get; set; }
 
-        public virtual Permiso Permiso { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Permisos_Usuarios> Permisos_Usuarios { get; set; }
     }
 }

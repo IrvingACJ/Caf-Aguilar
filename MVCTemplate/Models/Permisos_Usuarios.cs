@@ -6,17 +6,17 @@ namespace MVCTemplate.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Inventario")]
-    public partial class Inventario
+    public partial class Permisos_Usuarios
     {
-        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int IDproducto { get; set; }
+        public int ID { get; set; }
 
-        public int? Cantidad { get; set; }
+        public int IDpermiso { get; set; }
 
-        public int? Minimo { get; set; }
+        public int IDusuario { get; set; }
 
-        public virtual Producto Producto { get; set; }
+        public virtual Permisos Permisos { get; set; }
+
+        public virtual Usuarios Usuarios { get; set; }
     }
 }

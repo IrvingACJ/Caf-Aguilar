@@ -3,59 +3,260 @@
     ViewBag.Title = "NuevaOrden";
 }
 
-<h2>NuevaOrden</h2>
-
+<h1 class=" text-center" style="font-weight:500">Nuevas Ordenes</h1>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-1">
-            <span class="font-montserrat fs-15 semi-bold" style="text-align:center">Producto</span>
-        </div>
-        <div class="col-8">
-            <input type="text" id="txtProductID" name="idProducto" placeholder="ID del Producto" class="form-control full-width" />
-        </div>
-        <div class="col-3">
-            <button id="btnAgregar" class="btn btn-primary full-width">Agregar</button>
+    <div id="cards" val=0>
+        <div>
+            <div id="0Card" class="card card-default">
+                <div class="card-header ">
+                    <div class="card-title">
+                        <label id="0TitleOrden" class="bold"># Orden #</label>
+                    </div>
+                    <div class="card-controls">
+                        <ul>
+                            <li>
+                                <a href="#" class="card-collapse" data-toggle="collapse"><i class="card-icon card-icon-collapse"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="card-refresh" data-toggle="refresh"><i class="card-icon card-icon-refresh"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="card-close" data-toggle="close"><i class="card-icon card-icon-close"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-block">
+
+                    <div class="row">
+                        <div class="col-1">
+                            <span class="font-montserrat fs-15 semi-bold" style="text-align:center">Producto</span>
+                        </div>
+                        <div class="col-8">
+                            <select id="0SelectProduct" class="cs-select cs-skin-slide full-width" data-init-plugin="cs-select"></select>
+                        </div>
+                        <div class="col-3">
+                            <button id="0btnAgregar" class="btn btn-primary full-width">Agregar</button>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <table id="0tablaOrden" class="table table-active full-width">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Producto
+                                        </th>
+                                        <th>
+                                            Precio
+                                        </th>
+                                        <th style="text-align:center">
+                                            Opciones
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th>
+                                            <span class="bold pull-right">Total: $<span id="0lblTotal">0</span></span>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <button class="btn btn-block btn-primary" id="0btnGenerar">Generar Orden</button>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $("#0TitleOrden").css("color", getRandomColor());
+                    $('#0Card').card({
+                        onRefresh: function () {
+                            // Timeout to simulate AJAX response delay
+                            setTimeout(function () {
+                                $('#0Card').card({
+                                    refresh: false
+                                });
+                            }, 500);
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: '@Url.Action("GetList", "Orden")',
+                        data: { },
+                        success: function (response) {
+                            var x = JSON.parse(response);
+                            var select = $('#0SelectProduct');
+                            select.empty();
+                            select.append('<option value= -1 > </option>');
+                            $.each(x, function (value, key) {
+                                select.append('<option value=' + key.ID + '-' + key.Tipo+ '>' + key.Nombre + '</option>');
+                            });
+                            select.select2();
+                            select.parent().addClass('full-width')
+                        },
+                        error: function (exception) {
+                            console.log("error" + exception);
+                        }
+                    });
+                    $('#0btnAgregar').click(agregarAOrden);
+                    $('#0SelectProduct').keypress(function (e) {
+                        if (e.keyCode == 13)
+                            agregarAOrden();
+                    });
+                    var table = $('#0tablaOrden').DataTable({
+                        pageLength: 5,
+                        lengthMenu: [5,10,20],
+                        dom: 'fltip',
+                        columns: [
+                            {
+                                data: 'Nombre'
+                            },
+                            {
+                                data: 'Precio',
+                                render: function (data) {
+                                    return "$" + data;
+                                }
+                            },
+                            {
+                                data: null,
+                                render: function () {
+                                    return '<button class="btn m-0 p-0 btn-link full-width text-danger remove"><i class="fa fa-minus"></i></button>'
+                                }
+                            }
+                        ]
+                    });
+                    $('#0btnGenerar').click(function () {
+                        var resumen = {
+                            productos: table.data().toArray(),
+                            total: parseFloat($('#0lblTotal').text())
+                        };
+                        console.log(resumen);
+                        $.post('@Url.Action("CrearOrden", "Orden")', { data: JSON.stringify(resumen) },
+                            function (data, status) {
+                                if (data == 'OK') {
+                                    table.rows().remove().draw(true);
+                                    $('body').pgNotification({ style: 'flip', message: 'Orden generada', type: 'success' }).show();
+                                    $('#0Card').addClass('hidden');
+                                }
+                            }
+                        ).fail(function (err) {
+                            $('body').pgNotification({ style: 'flip', message: err.responseText, type: 'danger' }).show();
+
+                        });
+                    });
+                    table.on('click', '.remove', function () {
+                        table
+                            .row($(this).parents('tr'))
+                            .remove()
+                            .draw();
+                        var total = 0;
+                        table.data().each(function (item) {
+                            var precio = parseFloat(item.Precio);
+                            total += precio;
+                        });
+                        $('#0lblTotal').text(total);
+                        console.log(table.data().toArray());
+                    });
+                });
+                function agregarAOrden() {
+                    var id = $('#0SelectProduct').val().trim();
+                    $('#0SelectProduct').val(-1);
+                    if (id != '-1' || id != -1) {
+                        var details = id.split('-');
+                        if (details[1] == 'Café') {
+                            var table = $('#0tablaOrden').DataTable();
+                            $.get('@Url.Action("getDetallesCafé", "Cafés")', { Id: parseInt(details[0]) }, function (data, status) {
+                                if (data.status == 'OK') {
+                                    table.row.add({ Nombre: data.info.Nombre, Precio: data.info.Precio, Id: id }).draw(true);
+                                    var total = 0;
+                                    table.data().each(function (item) {
+                                        var precio = parseFloat(item.Precio);
+                                        total += precio;
+                                    });
+                                $('#0lblTotal').text(total);
+                                }
+                                else {
+                                    $('body').pgNotification({style:'flip', message:'Producto no encontrado', type:'danger'}).show();
+                                }
+                             }).fail(function (err) {
+                                $('body').pgNotification({ style: 'flip', message: err.responseText, type: 'danger' });
+                             });
+                        }
+                        else if (details[1] = 'Postre') {
+                            var table = $('#0tablaOrden').DataTable();
+                            $.get('@Url.Action("getDetallesPostre","Postres")', { Id: parseInt(details[0]) }, function (data, status) {
+                                if (data.status == 'OK') {
+                                    table.row.add({ Nombre: data.info.Nombre, Precio: data.info.Precio, Id: id }).draw(true);
+                                    var total = 0;
+                                    table.data().each(function (item) {
+                                        var precio = parseFloat(item.Precio);
+                                        total += precio;
+                                    });
+                                $('#0lblTotal').text(total);
+                                }
+                                else {
+                                    $('body').pgNotification({style:'flip', message:'Producto no encontrado', type:'danger'}).show();
+                                }
+                             }).fail(function (err) {
+                                $('body').pgNotification({ style: 'flip', message: err.responseText, type: 'danger' });
+                             });
+                        }
+                    }
+                    else {
+                        $('body').pgNotification({ style: 'flip', message: 'Seleccione un producto', type: 'danger' });
+                    }
+                }
+            </script>
         </div>
     </div>
-    <div class="row mt-3">
-        <div class="col-12">
-            <table id="tablaOrden" class="table table-active full-width">
-                <thead>
-                    <tr>
-                        <th>
-                            Producto
-                        </th>
-                        <th>
-                            Precio
-                        </th>
-                        <th style="text-align:center">
-                            Opciones
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th></th>
-                        <th>
-                            <span class="bold pull-right">Total: $<span id="lblTotal">0</span></span>
-                        </th>
-                        <th></th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-    <div class="row mt-2">
-        <button class="btn btn-block btn-primary" id="btnGenerar">Generar Orden</button>
+    <div class="row full-width">
+        <button class="btn btn-block btn-info " style="width: 300px; height: 300px; margin-left: auto; margin-right: auto; font-size:700%;" id="btnNuevo" onclick="TemplateNuevaOrden()">+</button>
     </div>
 </div>
-
 <script>
     $(document).ready(function () {
+        @*$("#0TitleOrden").css("color", getRandomColor());
+        $('#myCard').card({
+            onRefresh: function () {
+                // Timeout to simulate AJAX response delay
+                setTimeout(function () {
+                    $('#myCard').card({
+                        refresh: false
+                    });
+                }, 500);
+            }
+        });
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '@Url.Action("GetList", "Orden")',
+            data: { },
+            success: function (response) {
+                var x = JSON.parse(response);
+                var select = $('#SelectProduct');
+                select.empty();
+                select.append('<option value= -1 > </option>');
+                $.each(x, function (value, key) {
+                    select.append('<option value=' + key.ID + '-' + key.Tipo+ '>' + key.Nombre + '</option>');
+                });
+                select.select2();
+                select.parent().addClass('full-width')
+            },
+            error: function (exception) {
+                console.log("error" + exception);
+            }
+        });
         $('#btnAgregar').click(agregarAOrden);
-        $('#txtProductID').keypress(function (e) {
+        $('#SelectProduct').keypress(function (e) {
             if (e.keyCode == 13)
                 agregarAOrden();
         });
@@ -81,11 +282,10 @@
                 }
             ]
         });
-
-        $('#btnGenerar').click(function () {
+        $('#0btnGenerar').click(function () {
             var resumen = {
                 productos: table.data().toArray(),
-                total: parseFloat($('#lblTotal').text())
+                total: parseFloat($('#0lblTotal').text())
             };
             console.log(resumen);
             $.post('@Url.Action("CrearOrden", "Orden")', { data: JSON.stringify(resumen) },
@@ -101,7 +301,6 @@
 
             });
         });
-
         table.on('click', '.remove', function () {
             table
                 .row($(this).parents('tr'))
@@ -112,33 +311,280 @@
                 var precio = parseFloat(item.Precio);
                 total += precio;
             });
-            $('#lblTotal').text(total);
+            $('#0lblTotal').text(total);
             console.log(table.data().toArray());
-        });
-
+        });*@
     });
-
-    function agregarAOrden() {
-        var id = parseInt($('#txtProductID').val().trim());
-        $('#txtProductID').val('');
-        var table = $('#tablaOrden').DataTable();
-        $.get('@Url.Action("getDetallesPostre","Postres")', { Id: id }, function (data, status) {
-            if (data.status == 'OK') {
-                table.row.add({ Nombre: data.info.Nombre, Precio: data.info.Precio, Id: id }).draw(true);
-                var total = 0;
-                table.data().each(function (item) {
-                    var precio = parseFloat(item.Precio);
-                    total += precio;
-                });
-
-                $('#lblTotal').text(total);
-            }
-            else {
-                $('body').pgNotification({style:'flip', message:'Producto no encontrado', type:'danger'}).show();
-            }
-        }).fail(function (err) {
-            $('body').pgNotification({ stUrllUrl: 'flip', message: err.responseText, type: 'danger' });
-
-        });
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
     }
+    function TemplateNuevaOrden() {
+        var newCard = $('#cards').val() + 1
+        $('#cards').val(newCard);
+        $('#cards').append(`
+         <div>
+            <div id="`+newCard+`Card" class="card card-default">
+                <div class="card-header ">
+                    <div class="card-title">
+                        <label id="`+ newCard +`TitleOrden" class="bold"># Orden #</label>
+                    </div>
+                    <div class="card-controls">
+                        <ul>
+                            <li>
+                                <a href="#" class="card-collapse" data-toggle="collapse"><i class="card-icon card-icon-collapse"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="card-refresh" data-toggle="refresh"><i class="card-icon card-icon-refresh"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="card-close" data-toggle="close"><i class="card-icon card-icon-close"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-block">
+
+                    <div class="row">
+                        <div class="col-1">
+                            <span class="font-montserrat fs-15 semi-bold" style="text-align:center">Producto</span>
+                        </div>
+                        <div class="col-8">
+                            <select id="`+ newCard +`SelectProduct" class="cs-select cs-skin-slide full-width" data-init-plugin="cs-select"></select>
+                        </div>
+                        <div class="col-3">
+                            <button id="`+ newCard +`btnAgregar" class="btn btn-primary full-width">Agregar</button>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <table id="`+ newCard +`tablaOrden" class="table table-active full-width">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Producto
+                                        </th>
+                                        <th>
+                                            Precio
+                                        </th>
+                                        <th style="text-align:center">
+                                            Opciones
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th>
+                                            <span class="bold pull-right">Total: $<span id="`+ newCard +`lblTotal">0</span></span>
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <button class="btn btn-block btn-primary" id="`+ newCard +`btnGenerar">Generar Orden</button>
+                    </div>
+                </div>
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $("#`+ newCard +`TitleOrden").css("color", getRandomColor());
+                    $('#`+ newCard +`Card').card({
+                        onRefresh: function () {
+                            // Timeout to simulate AJAX response delay
+                            setTimeout(function () {
+                                $('#`+ newCard +`Card').card({
+                                    refresh: false
+                                });
+                            }, 500);
+                        }
+                    });
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: '@Url.Action("GetList", "Orden")',
+                        data: { },
+                        success: function (response) {
+                            var x = JSON.parse(response);
+                            var select = $('#`+ newCard +`SelectProduct');
+                            select.empty();
+                            select.append('<option value= -1 > </option>');
+                            $.each(x, function (value, key) {
+                                select.append('<option value=' + key.ID + '-' + key.Tipo+ '>' + key.Nombre + '</option>');
+                            });
+                            select.select2();
+                            select.parent().addClass('full-width')
+                        },
+                        error: function (exception) {
+                            console.log("error" + exception);
+                        }
+                    });
+                    $('#`+ newCard +`btnAgregar').click(agregarAOrden);
+                    $('#`+ newCard +`SelectProduct').keypress(function (e) {
+                        if (e.keyCode == 13)
+                            agregarAOrden();
+                    });
+                    var table = $('#`+ newCard +`tablaOrden').DataTable({
+                        pageLength: 5,
+                        lengthMenu: [5,10,20],
+                        dom: 'fltip',
+                        columns: [
+                            {
+                                data: 'Nombre'
+                            },
+                            {
+                                data: 'Precio',
+                                render: function (data) {
+                                    return "$" + data;
+                                }
+                            },
+                            {
+                                data: null,
+                                render: function () {
+                                    return '<button class="btn m-0 p-0 btn-link full-width text-danger remove"><i class="fa fa-minus"></i></button>'
+                                }
+                            }
+                        ]
+                    });
+                    $('#`+ newCard +`btnGenerar').click(function () {
+                        var resumen = {
+                            productos: table.data().toArray(),
+                            total: parseFloat($('#`+ newCard +`lblTotal').text())
+                        };
+                        console.log(resumen);
+                        $.post('@Url.Action("CrearOrden", "Orden")', { data: JSON.stringify(resumen) },
+                            function (data, status) {
+                                if (data == 'OK') {
+                                    table.rows().remove().draw(true);
+                                    $('body').pgNotification({ style: 'flip', message: 'Orden generada', type: 'success' }).show();
+                                    $('#`+ newCard +`Card').addClass('hidden');
+                                }
+                            }
+                        ).fail(function (err) {
+                            $('body').pgNotification({ style: 'flip', message: err.responseText, type: 'danger' }).show();
+
+                        });
+                    });
+                    table.on('click', '.remove', function () {
+                        table
+                            .row($(this).parents('tr'))
+                            .remove()
+                            .draw();
+                        var total = 0;
+                        table.data().each(function (item) {
+                            var precio = parseFloat(item.Precio);
+                            total += precio;
+                        });
+                        $('#`+ newCard +`lblTotal').text(total);
+                        console.log(table.data().toArray());
+                    });
+                });
+                function agregarAOrden() {
+                    var id = $('#`+ newCard +`SelectProduct').val().trim();
+                    $('#`+ newCard +`SelectProduct').val(-1);
+                    if (id != '-1' || id != -1) {
+                        var details = id.split('-');
+                        if (details[1] == 'Café') {
+                            var table = $('#`+ newCard +`tablaOrden').DataTable();
+                            $.get('@Url.Action("getDetallesCafé", "Cafés")', { Id: parseInt(details[0]) }, function (data, status) {
+                                if (data.status == 'OK') {
+                                    table.row.add({ Nombre: data.info.Nombre, Precio: data.info.Precio, Id: id }).draw(true);
+                                    var total = 0;
+                                    table.data().each(function (item) {
+                                        var precio = parseFloat(item.Precio);
+                                        total += precio;
+                                    });
+                                $('#`+ newCard +`lblTotal').text(total);
+                                }
+                                else {
+                                    $('body').pgNotification({style:'flip', message:'Producto no encontrado', type:'danger'}).show();
+                                }
+                             }).fail(function (err) {
+                                $('body').pgNotification({ style: 'flip', message: err.responseText, type: 'danger' });
+                             });
+                        }
+                        else if (details[1] = 'Postre') {
+                            var table = $('#`+ newCard +`tablaOrden').DataTable();
+                            $.get('@Url.Action("getDetallesPostre","Postres")', { Id: parseInt(details[0]) }, function (data, status) {
+                                if (data.status == 'OK') {
+                                    table.row.add({ Nombre: data.info.Nombre, Precio: data.info.Precio, Id: id }).draw(true);
+                                    var total = 0;
+                                    table.data().each(function (item) {
+                                        var precio = parseFloat(item.Precio);
+                                        total += precio;
+                                    });
+                                $('#`+ newCard +`lblTotal').text(total);
+                                }
+                                else {
+                                    $('body').pgNotification({style:'flip', message:'Producto no encontrado', type:'danger'}).show();
+                                }
+                             }).fail(function (err) {
+                                $('body').pgNotification({ style: 'flip', message: err.responseText, type: 'danger' });
+                             });
+                        }
+                    }
+                    else {
+                        $('body').pgNotification({ style: 'flip', message: 'Seleccione un producto', type: 'danger' });
+                    }
+                } <\/script> </div>`)
+    }
+@*
+    function agregarAOrden() {
+        var id = $('#SelectProduct').val().trim();
+        $('#SelectProduct').val(-1);
+        if (id != '-1' || id != -1) {
+            var details = id.split('-');
+            if (details[1] == 'Café') {
+                var table = $('#tablaOrden').DataTable();
+                $.get('@Url.Action("getDetallesCafé", "Cafés")', { Id: parseInt(details[0]) }, function (data, status) {
+                    if (data.status == 'OK') {
+                        table.row.add({ Nombre: data.info.Nombre, Precio: data.info.Precio, Id: id }).draw(true);
+                        var total = 0;
+                        table.data().each(function (item) {
+                            var precio = parseFloat(item.Precio);
+                            total += precio;
+                        });
+                    $('#0lblTotal').text(total);
+                    }
+                    else {
+                        $('body').pgNotification({style:'flip', message:'Producto no encontrado', type:'danger'}).show();
+                    }
+                 }).fail(function (err) {
+                    $('body').pgNotification({ style: 'flip', message: err.responseText, type: 'danger' });
+                 });
+            }
+            else if (details[1] = 'Postre') {
+                var table = $('#tablaOrden').DataTable();
+                $.get('@Url.Action("getDetallesPostre","Postres")', { Id: parseInt(details[0]) }, function (data, status) {
+                    if (data.status == 'OK') {
+                        table.row.add({ Nombre: data.info.Nombre, Precio: data.info.Precio, Id: id }).draw(true);
+                        var total = 0;
+                        table.data().each(function (item) {
+                            var precio = parseFloat(item.Precio);
+                            total += precio;
+                        });
+                    $('#0lblTotal').text(total);
+                    }
+                    else {
+                        $('body').pgNotification({style:'flip', message:'Producto no encontrado', type:'danger'}).show();
+                    }
+                 }).fail(function (err) {
+                    $('body').pgNotification({ style: 'flip', message: err.responseText, type: 'danger' });
+                 });
+            }
+        }
+        else {
+            $('body').pgNotification({ style: 'flip', message: 'Seleccione un producto', type: 'danger' });
+        }
+    }
+*@
 </script>

@@ -6,38 +6,29 @@ namespace MVCTemplate.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Orden")]
-    public partial class Orden
+    public partial class Postres
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Orden()
+        public Postres()
         {
-            DetallesOrdenCafés = new HashSet<DetallesOrdenCafés>();
             DetallesOrdenPostres = new HashSet<DetallesOrdenPostres>();
+            Ventas_Inventario = new HashSet<Ventas_Inventario>();
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int IDorden { get; set; }
+        public int IDpostre { get; set; }
 
-        public DateTime? Fecha { get; set; }
-
-        [Column(TypeName = "money")]
-        public decimal? postres { get; set; }
+        [StringLength(50)]
+        public string Nombre { get; set; }
 
         [Column(TypeName = "money")]
-        public decimal? cafés { get; set; }
-
-        [Column(TypeName = "money")]
-        public decimal? extras { get; set; }
-
-        [Column(TypeName = "money")]
-        public decimal? total { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetallesOrdenCafés> DetallesOrdenCafés { get; set; }
+        public decimal? Precio { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetallesOrdenPostres> DetallesOrdenPostres { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Ventas_Inventario> Ventas_Inventario { get; set; }
     }
 }

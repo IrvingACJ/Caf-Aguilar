@@ -1,14 +1,15 @@
-﻿@model IEnumerable<MVCTemplate.Models.DetallesOrdenPostre>
+﻿@model IEnumerable<MVCTemplate.Models.OrdenCompleta>
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalles de orden";
 }
 
-<h2>Details</h2>
+<h1 class=" text-center" style="font-weight:500">Detalles</h1>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Nueva orden", "Crear ordenes")
 </p>
+<h4 class="text-center">Ordenes</h4>
 <table class="table" id="tableRes">
     <thead>
         <tr>
@@ -16,7 +17,7 @@
                 Orden
             </th>
             <th>
-                Postre
+                Producto
             </th>
             <th>
                 Cantidad
@@ -27,19 +28,20 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Orden.IDorden)
+                    @Html.DisplayFor(modelItem => item.IDorden)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Postre.Nombre)
+                    @Html.DisplayFor(modelItem => item.Nombre)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Cantidad)
                 </td>
                 <td>
-                    $@(item.Cantidad * item.Postre.Precio)
+                    $@(item.Cantidad * item.Precio)
                 </td>
             </tr>
         }

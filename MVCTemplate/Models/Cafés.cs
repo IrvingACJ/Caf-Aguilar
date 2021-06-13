@@ -12,6 +12,7 @@ namespace MVCTemplate.Models
         public Cafés()
         {
             DetallesOrdenCafés = new HashSet<DetallesOrdenCafés>();
+            Ventas_Inventario = new HashSet<Ventas_Inventario>();
         }
 
         [Key]
@@ -24,9 +25,19 @@ namespace MVCTemplate.Models
 
         public int IDtamaño { get; set; }
 
+        public int IDtipo { get; set; }
+
+        [Column(TypeName = "money")]
+        public decimal? Precio { get; set; }
+
         public virtual Tamaños Tamaños { get; set; }
+
+        public virtual Tipos Tipos { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DetallesOrdenCafés> DetallesOrdenCafés { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Ventas_Inventario> Ventas_Inventario { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace MVCTemplate.Controllers
 {
     public class PostresController : Controller
     {
-        CafeAguilarDB db = new CafeAguilarDB();
+        ModelCaféAguilarDB db = new ModelCaféAguilarDB();
         // GET: Postres
         public ActionResult Index()
         {
@@ -37,7 +37,7 @@ namespace MVCTemplate.Controllers
         // POST: Postres/Create
         [HttpPost]
         public async Task<ActionResult> Create([Bind(Include =
-            "IDpostre,Nombre,Precio")]Postre postre)
+            "IDpostre,Nombre,Precio")]Postres postre)
         {
             try
             {
@@ -71,10 +71,9 @@ namespace MVCTemplate.Controllers
         }
 
         // POST: Postres/Edit/5
-
         [HttpPost]
         public async Task<ActionResult> Edit([Bind(Include =
-            "IDpostre,Nombre,Precio")]Postre postre)
+            "IDpostre,Nombre,Precio")]Postres postre)
         {
             try
             {
@@ -105,7 +104,7 @@ namespace MVCTemplate.Controllers
         // POST: Postres/Delete/5
         [HttpPost]
         public async Task<ActionResult> Delete([Bind(Include =
-            "IDpostre,Nombre,Precio")]Postre postre)
+            "IDpostre,Nombre,Precio")]Postres postre)
         {
             try
             {

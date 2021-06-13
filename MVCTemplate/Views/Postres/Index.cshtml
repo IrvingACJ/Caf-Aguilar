@@ -1,46 +1,53 @@
-﻿@model IEnumerable<MVCTemplate.Models.Postre>
+﻿@model IEnumerable<MVCTemplate.Models.Postres>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Postres";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h1 class=" text-center" style="font-weight:500; font-family: 'Pattaya', sans-serif;">Postres</h1>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Crear nuevo", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Precio)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaModificacion)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Precio)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaModificacion)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IDpostre }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IDpostre }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IDpostre })
-        </td>
-    </tr>
-}
-
+<table id="DT" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Precio)
+            </th>
+            <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Precio)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.IDpostre }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.IDpostre }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.IDpostre })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
+<script>
+    $(document).ready(function () {
+        $('#DT').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf'
+            ]
+        });
+    });
+</script>

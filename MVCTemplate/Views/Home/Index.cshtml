@@ -9,11 +9,15 @@
         <div class="inner" style="transform: translateY(0px); opacity: 1; display:inline-block;">
 
         </div>
-        <button class="btn btn-primary center" style=" display: block; margin-left: auto; margin-right: auto;  margin-bottom: 15px; width: 35%;" >+</button>
+        <button class="btn btn-primary center bold" style=" display: block; margin-left: auto; margin-right: auto;  margin-bottom: 15px; width: 35%;" onclick="Ordenes()">Ordenes</button>
     </div>
 </div>
 <div class="container-fluid container-fixed-lg ">
-
+    <script>
+        function Ordenes() {
+            window.location.href = '@Url.Action("NuevaOrden", "Orden")';
+        }
+    </script>
 </div>
 <script src="~/Scripts/app/home.js"></script>
 

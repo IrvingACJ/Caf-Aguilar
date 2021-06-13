@@ -6,27 +6,22 @@ namespace MVCTemplate.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Postre
+    public partial class Permisos
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Postre()
+        public Permisos()
         {
-            DetallesOrdenPostres = new HashSet<DetallesOrdenPostre>();
+            Permisos_Usuarios = new HashSet<Permisos_Usuarios>();
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int IDpostre { get; set; }
+        public int IDpermiso { get; set; }
 
-        [StringLength(50)]
-        public string Nombre { get; set; }
-
-        [Column(TypeName = "money")]
-        public decimal? Precio { get; set; }
-
-        public DateTime? FechaModificacion { get; set; }
+        [StringLength(100)]
+        public string Permiso { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DetallesOrdenPostre> DetallesOrdenPostres { get; set; }
+        public virtual ICollection<Permisos_Usuarios> Permisos_Usuarios { get; set; }
     }
 }

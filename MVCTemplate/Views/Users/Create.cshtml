@@ -1,19 +1,18 @@
-﻿@model MVCTemplate.Models.Usuario
+﻿@model MVCTemplate.Models.Usuarios
 
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
+<h1 class=" text-center" style="font-weight:500">Crear</h1>
 
-
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Usuarios</h4>
+
+    <div id="FormUser" class="form-horizontal">
+        <h4 class="text-center">Usuarios</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -32,18 +31,59 @@
                 @Html.ValidationMessageFor(model => model.Contraseña, "", new { @class = "text-danger" })
             </div>
         </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="SelectPermisos">Permisos</label>
+            <div class="col-md-offset-2 col-md-10">
+                <select multiple id="SelectPermisos" class="cs-select cs-skin-slide" data-init-plugin="cs-select"></select>
+            </div>
+        </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <button class="btn btn-success" onclick="Crear()">Crear</button>|
+                @Html.ActionLink("Volver", "Index")
             </div>
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
+<script>
+        $(document).ready(function () {
+             $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '@Url.Action("GetPermits", "Users")',
+                data: { },
+                success: function (response) {
+                    var x = JSON.parse(response);
+                    var select = $('#SelectPermisos');
+                    select.empty();
+                    $.each(x, function (value, key) {
+                        select.append('<option value=' + key.IDpermiso + '>' + key.Permiso + '</option>');
+                    });
+                    select.select2().addClass('full-width');
+                    select.parent().addClass('full-width');
+                },
+                 error: function (exception) {
+                     console.log("error" + exception.responseText);
+                }
+            });
+        });
+    function Crear() {
+        var values = $('#SelectPermisos').val().join(',');
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("Create2", "Users")',
+                data: { nombre: $('#Nombre').val(), contrase_a: $('#Contrase_a').val(), permisos: values},
+                success: function (response) {
+                    window.location.href = response;
+                },
+                error: function (exception) {
+                    console.log("error" + exception);
+                }
+            });
+        }
+</script>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

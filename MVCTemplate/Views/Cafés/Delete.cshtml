@@ -1,29 +1,29 @@
 ﻿@model MVCTemplate.Models.Cafés
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Eliminar Café";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Delete</h2>
+<h1 class=" text-center" style="font-weight:500">Eliminar</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3 class="text-center">¿Estás seguro?</h3>
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div>
-        <h4>Cafés</h4>
+        @Html.HiddenFor(model => model.IDcafé)
+        <h4> @Html.DisplayFor(model => model.Nombre)</h4>
         <hr />
         <dl class="dl-horizontal">
-
             <dt>
-                @Html.HiddenFor(model => model.IDcafé)
-                @Html.DisplayNameFor(model => model.Nombre)
+                @Html.DisplayNameFor(model => model.Precio)
             </dt>
 
             <dd>
-                @Html.DisplayFor(model => model.Nombre)
+                $ @Html.DisplayFor(model => model.Precio)
             </dd>
 
             <dt>
@@ -31,33 +31,23 @@
             </dt>
 
             <dd>
-                @Html.HiddenFor(model => model.IDtamaño)
                 @Html.DisplayFor(model => model.Tamaños.Tamaño)
             </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Tipos.Tipo)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Tipos.Tipo)
+            </dd>
+
+
         </dl>
         <div class="form-actions no-color">
-            <button class="btn btn-danger" onclick="Borrar()">Borrar</button>
-            @Html.ActionLink("Back to List", "Index")
+            <label for="Eliminar" class="btn btn-danger">Eliminar</label>
+            <input id="Eliminar" type="submit" value="Delete" class="btn btn-default hidden" />|
+            @Html.ActionLink("Volver", "Index")
         </div>
     </div>
-
-    <script>
-        function Borrar() {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("Delete2", "Cafés")',
-                data: { IDcafé: $('#IDcaf_').val()},
-                success: function (response) {
-                    window.location.href = response;
-                },
-                error: function (exception) {
-                    console.log("error" + exception);
-                }
-            });
-        }
-    </script>
-}
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
 }

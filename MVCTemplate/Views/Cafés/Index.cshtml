@@ -1,52 +1,66 @@
 ﻿@model IEnumerable<MVCTemplate.Models.Cafés>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Cafés";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h1 class=" text-center" style="font-weight:500; font-family: 'Pattaya', sans-serif;">Cafés</h1>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Crear nuevo", "Create")
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Tamaños.Tamaño)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    @foreach (var item in Model)
-    {
-    <tbody>
-
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tamaños.Tamaño)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.IDcafé }) |
-                @Html.ActionLink("Details", "Details", new { id = item.IDcafé }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.IDcafé })
-            </td>
-        </tr>
-    </tbody>
-    }
-
-</table>
-
+<div>
+    <table class="table" id="DT">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Precio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tamaños.Tamaño)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tipos.Tipo)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Precio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tamaños.Tamaño)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Tipos.Tipo)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.IDcafé }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.IDcafé }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.IDcafé })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="col-3 m-t-15">
+    <a href="@Url.Action("Index","Tamaños") " class="btn btn-primary">Ir a Tamaños</a>
+</div>
 <script>
     $(document).ready(function () {
-        $('#DT_Cafés').DataTable({
+        $('#DT').DataTable({
             dom: 'Bfrtip',
             buttons: [
                 'copy', 'excel', 'pdf'

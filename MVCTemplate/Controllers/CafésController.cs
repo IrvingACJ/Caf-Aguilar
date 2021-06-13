@@ -13,7 +13,7 @@ namespace MVCTemplate.Controllers
     public class CafésController : Controller
     {
         // GET: Cafés
-        CafeAguilarDB db = new CafeAguilarDB();
+        ModelCaféAguilarDB db = new ModelCaféAguilarDB();
         public ActionResult Index()
         {
             var cafés = db.Cafés.ToList();
@@ -34,18 +34,19 @@ namespace MVCTemplate.Controllers
             return View();
         }
 
-        public ActionResult Create2(string nombre, int id_tamaño)
+        public ActionResult Create2(string nombre, int precio, int id_tamaño, int id_tipo)
         {
             var lastRecord = db.Cafés.OrderByDescending(u => u.IDcafé).FirstOrDefault();
             var New_Café = new Cafés();
             try
             {
-                if (lastRecord == null)
-                { New_Café.IDcafé = 0; }
-                else
-                { New_Café.IDcafé = lastRecord.IDcafé + 1; }
+                New_Café.IDcafé = ((lastRecord == null) ||
+                    (lastRecord.IDcafé == 0))
+                    ? 1 : lastRecord.IDcafé + 1;
                 New_Café.Nombre = nombre;
+                New_Café.Precio = precio;
                 New_Café.IDtamaño = id_tamaño;
+                New_Café.IDtipo = id_tipo;
                 db.Cafés.Add(New_Café);
                 db.SaveChanges();
                 return Content(Url.Action("Index", new { message = "Café Agregado" }));
@@ -57,50 +58,49 @@ namespace MVCTemplate.Controllers
             }
         }
 
-        public ActionResult GetList()
+        public ActionResult GetList(string Option)
         {
-            var tam = from entry in db.Tamaños.AsEnumerable()
-            select new {
-                entry.IDtamaño,
-                entry.Tamaño};
-            tam = tam.ToList();
-            var json = JsonConvert.SerializeObject(tam,Formatting.None);
-            return Json(json);
+            switch (Option)
+            {
+                case "Tamaños":
+                    var tam = from entry in db.Tamaños.AsEnumerable()
+                              select new
+                              {
+                                  entry.IDtamaño,
+                                  entry.Tamaño
+                              };
+                    var json1 = JsonConvert.SerializeObject(tam.ToList(), Formatting.None);
+                    return Json(json1);
+                    break;
+                case "Tipos":
+                    var tipos = from entry in db.Tipos.AsEnumerable()
+                              select new
+                              {
+                                  entry.IDtipo,
+                                  entry.Tipo
+                              };
+                    var json2 = JsonConvert.SerializeObject(tipos.ToList(), Formatting.None);
+                    return Json(json2);
+                    break;
+            }
+            return Content("fail");
         }
+        public ActionResult getDetallesCafé(int Id)
+        {
+            var postre = (from d in db.Cafés.AsEnumerable()
+                          where d.IDcafé == Id
+                          select new
+                          {
+                              d.Nombre,
+                              d.Precio,
+                              Id = d.IDcafé
+                          }).FirstOrDefault();
 
-        // POST: Cafés/Create
-        //[HttpPost]
-        //public async Task<ActionResult> Create([Bind(Include =
-        //    "IDcafé,Nombre,Regular, Grande,Rocas, Frappe, FechaModificacion")] Cafés café)
-        //{
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            var lastRecord = db.Cafés.OrderByDescending
-        //              (u => u).FirstOrDefault();
-        //            if (lastRecord != null)
-        //            {
-        //                café.IDcafé = 0;
-        //            }
-        //            else
-        //            {
-        //                café.IDcafé += 1;
-        //            }
-        //            db.Cafés.Add(café);
-        //            await db.SaveChangesAsync();
-        //            return RedirectToAction("Index");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var exception = ex.ToString();
-        //        return RedirectToAction("Index", new { message = "Error: " + exception });
-        //    }
-        //    return View();
-        //}
+            return postre == null ? Json(new { status = "BAD" }, JsonRequestBehavior.AllowGet)
+                : Json(new { status = "OK", info = postre }, JsonRequestBehavior.AllowGet);
 
-        // GET: Cafés/Edit/5
+            //return Json(postre.FirstOrDefault(), JsonRequestBehavior.AllowGet);
+        }
         public ActionResult Edit(int id, string message = "")
         {
             var user = db.Cafés.Where(
@@ -138,7 +138,27 @@ namespace MVCTemplate.Controllers
                 u => u.IDcafé == id).FirstOrDefault();
             return View(café);
         }
+        [HttpPost]
+        public async Task<ActionResult> Delete([Bind(Include =
+            "IDcafé")]Cafés café)
+        {
+            try
+            {
+                var delcafé = db.Cafés.Where(
+                    u => u.IDcafé == café.IDcafé).FirstOrDefault();
+                // TODO: Add update logic here
 
+                db.Entry(delcafé).State = EntityState.Deleted;
+                db.Cafés.Remove(delcafé);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index", new { message = "Café Eliminado" });
+            }
+            catch (Exception ex)
+            {
+                var exception = ex.ToString();
+                return RedirectToAction("Index", new { message = "Error: " + exception });
+            }
+        }
         public ActionResult Delete2(int IDcafé)
         {
             var lastRecord = db.Cafés.Where

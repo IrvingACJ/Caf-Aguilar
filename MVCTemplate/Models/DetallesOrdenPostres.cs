@@ -6,20 +6,19 @@ namespace MVCTemplate.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class ProductoInventario_view
+    public partial class DetallesOrdenPostres
     {
-        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int IDproducto { get; set; }
+        public int ID { get; set; }
 
-        [StringLength(50)]
-        public string Nombre { get; set; }
+        public int? IDorden { get; set; }
 
-        [Column(TypeName = "money")]
-        public decimal? Precio { get; set; }
+        public int? IDpostres { get; set; }
 
         public int? Cantidad { get; set; }
 
-        public int? Minimo { get; set; }
+        public virtual Orden Orden { get; set; }
+
+        public virtual Postres Postres { get; set; }
     }
 }

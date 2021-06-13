@@ -1,0 +1,34 @@
+﻿@model MVCTemplate.Models.Tamaños
+
+@{
+    ViewBag.Title = "Eliminar Tamaños";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class=" text-center" style="font-weight:500">Eliminar</h1>
+
+<h3 class="text-center">¿Estás seguro?</h3>
+
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Tamaño)
+            </dt>
+
+            <dd>
+                @Html.HiddenFor(model => model.IDtamaño)
+                @Html.DisplayFor(model => model.Tamaño)
+            </dd>
+
+        </dl>
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

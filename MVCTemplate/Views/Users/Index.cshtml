@@ -1,17 +1,17 @@
-﻿@model IEnumerable<MVCTemplate.Models.Usuario>
+﻿@model IEnumerable<MVCTemplate.Models.Usuarios>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Usuarios";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Usuarios</h2>
+<h1 class=" text-center" style="font-weight:500; font-family: 'Pattaya', sans-serif;">Usuarios</h1>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Crear nuevo", "Create")
 </p>
 <table id="DT_Users" class="table">
-    
+
     <thead>
         <tr>
             <th>
@@ -42,11 +42,14 @@
                     @Html.ActionLink("Delete", "Delete", new { id = item.IDusuario })
                 </td>
             </tr>
-            }
-    </tbody>   
-    
+        }
+    </tbody>
+
 
 </table>
+<div class="col-3 m-t-15">
+    <a href="@Url.Action("Index","Permisos") " class="btn btn-primary">Ir a Tamaños</a>
+</div>
 <script>
     $(document).ready(function () {
         $('#DT_Users').DataTable({

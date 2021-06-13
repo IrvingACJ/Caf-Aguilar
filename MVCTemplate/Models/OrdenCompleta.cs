@@ -6,12 +6,15 @@ namespace MVCTemplate.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Productos")]
-    public partial class Producto
+    [Table("OrdenCompleta")]
+    public partial class OrdenCompleta
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int IDproducto { get; set; }
+        public long ID_COL { get; set; }
+
+        public int? IDorden { get; set; }
+
+        public int? IDproduct { get; set; }
 
         [StringLength(50)]
         public string Nombre { get; set; }
@@ -19,6 +22,9 @@ namespace MVCTemplate.Models
         [Column(TypeName = "money")]
         public decimal? Precio { get; set; }
 
-        public virtual Inventario Inventario { get; set; }
+        public int? Cantidad { get; set; }
+
+        [StringLength(4)]
+        public string Tipo { get; set; }
     }
 }
