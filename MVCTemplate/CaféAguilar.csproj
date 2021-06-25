@@ -140,7 +140,9 @@
     <Compile Include="Class\ClsPwd.cs" />
     <Compile Include="Class\WindowsUser.cs" />
     <Compile Include="Controllers\CafésController.cs" />
+    <Compile Include="Controllers\EstadisticasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InventarioController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\OrdenController.cs" />
     <Compile Include="Controllers\PermisosController.cs" />
@@ -1822,6 +1824,11 @@
     <Content Include="Views\Tamaños\Create.cshtml" />
     <Content Include="Views\Tamaños\Delete.cshtml" />
     <Content Include="Views\Permisos\Index.cshtml" />
+    <Content Include="Views\Estadisticas\Index.cshtml" />
+    <Content Include="Views\Inventario\Index.cshtml" />
+    <Content Include="Views\Inventario\Delete.cshtml" />
+    <Content Include="Views\Inventario\Create.cshtml" />
+    <Content Include="Views\Inventario\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

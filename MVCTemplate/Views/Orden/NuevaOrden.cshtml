@@ -139,19 +139,25 @@
                             productos: table.data().toArray(),
                             total: parseFloat($('#0lblTotal').text())
                         };
-                        console.log(resumen);
-                        $.post('@Url.Action("CrearOrden", "Orden")', { data: JSON.stringify(resumen) },
-                            function (data, status) {
-                                if (data == 'OK') {
-                                    table.rows().remove().draw(true);
-                                    $('body').pgNotification({ style: 'flip', message: 'Orden generada', type: 'success' }).show();
-                                    $('#0Card').addClass('hidden');
+                        if (resumen.productos.length > 0) {
+                            $.post('@Url.Action("CrearOrden", "Orden")', { data: JSON.stringify(resumen) },
+                                function (data, status) {
+                                    if (data == 'OK') {
+                                        table.rows().remove().draw(true);
+                                        $('body').pgNotification({ style: 'flip', message: 'Orden generada', type: 'success' }).show();
+                                        $('#0Card').addClass('hidden');
+                                    }
                                 }
-                            }
-                        ).fail(function (err) {
-                            $('body').pgNotification({ style: 'flip', message: err.responseText, type: 'danger' }).show();
+                            ).fail(function (err) {
+                                $('body').pgNotification({ style: 'flip', message: err.responseText, type: 'danger' }).show();
 
-                        });
+                            });
+                        }
+                        else {
+                            $('body').pgNotification({ style: 'flip', message: 'No hay productos en la orden!', type: 'danger' }).show();
+
+                        }
+
                     });
                     table.on('click', '.remove', function () {
                         table

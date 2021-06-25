@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -107,6 +108,28 @@ namespace MVCTemplate.Controllers
                             IDpostres = Convert.ToInt32(id_tipo[0])
                         };
                         db.DetallesOrdenPostres.Add(entryP);
+                        var vaso = (from u in db.Inventario_Productos.AsEnumerable()
+                                   where u.IDproducto == 9
+                                   select u).FirstOrDefault();
+                        var cuchara = (from u in db.Inventario_Productos.AsEnumerable()
+                                       where u.IDproducto == 3
+                                       select u).FirstOrDefault();
+                        var tenedor = (from u in db.Inventario_Productos.AsEnumerable()
+                                       where u.IDproducto == 4
+                                       select u).FirstOrDefault();
+                        var tapa = (from u in db.Inventario_Productos.AsEnumerable()
+                                    where u.IDproducto == 13
+                                    select u).FirstOrDefault();
+
+                        vaso.Cantidad -= 1;
+                        cuchara.Cantidad -= 1;
+                        tenedor.Cantidad -= 1;
+                        tapa.Cantidad -= 1;
+                        db.Entry(vaso).State = EntityState.Modified;
+                        db.Entry(cuchara).State = EntityState.Modified;
+                        db.Entry(tenedor).State = EntityState.Modified;
+                        db.Entry(tapa).State = EntityState.Modified;
+                        db.SaveChanges();
                     }
                     else if (id_tipo[1] == "Café")
                     {
@@ -120,6 +143,67 @@ namespace MVCTemplate.Controllers
                             IDcafé = Convert.ToInt32(id_tipo[0])
                         };
                         db.DetallesOrdenCafés.Add(entryC);
+
+                        var cafe = (from c in db.Cafés.AsEnumerable()
+                                   where c.IDcafé == entryC.IDcafé
+                                   select c).FirstOrDefault();
+                        Inventario_Productos vaso = null, popote = null, tapa = null;
+                        switch (cafe.IDtipo)
+                        {
+                            case 1:
+                                if(cafe.IDtamaño == 1)
+                                {
+                                    vaso = (from u in db.Inventario_Productos.AsEnumerable()
+                                            where u.IDproducto == 10
+                                            select u).FirstOrDefault();
+                                    tapa = (from u in db.Inventario_Productos.AsEnumerable()
+                                            where u.IDproducto == 11
+                                            select u).FirstOrDefault();
+                                }
+                                else
+                                {
+                                    vaso = (from u in db.Inventario_Productos.AsEnumerable()
+                                            where u.IDproducto == 2
+                                            select u).FirstOrDefault();
+                                    tapa = (from u in db.Inventario_Productos.AsEnumerable()
+                                            where u.IDproducto == 6
+                                            select u).FirstOrDefault();
+                                }
+                                break;
+                            case 2:
+                                vaso = (from u in db.Inventario_Productos.AsEnumerable()
+                                            where u.IDproducto == 9
+                                            select u).FirstOrDefault();
+                                tapa = (from u in db.Inventario_Productos.AsEnumerable()
+                                        where u.IDproducto == 13
+                                        select u).FirstOrDefault();
+                                popote = (from u in db.Inventario_Productos.AsEnumerable()
+                                        where u.IDproducto == 5
+                                        select u).FirstOrDefault();
+                                popote.Cantidad -= 1;
+                                db.Entry(popote).State = EntityState.Modified;
+                                break;
+                            case 3:
+                                vaso = (from u in db.Inventario_Productos.AsEnumerable()
+                                        where u.IDproducto == 9
+                                        select u).FirstOrDefault();
+                                tapa = (from u in db.Inventario_Productos.AsEnumerable()
+                                        where u.IDproducto == 12
+                                        select u).FirstOrDefault();
+                                popote = (from u in db.Inventario_Productos.AsEnumerable()
+                                          where u.IDproducto == 5
+                                          select u).FirstOrDefault();
+                                popote.Cantidad -= 1;
+                                db.Entry(popote).State = EntityState.Modified;
+                                break;
+                            default:
+                                break;
+                        }
+                        vaso.Cantidad -= 1;
+                        tapa.Cantidad -= 1;
+                        db.Entry(vaso).State = EntityState.Modified;
+                        db.Entry(tapa).State = EntityState.Modified;
+
                     }
                     db.SaveChanges();
                 }

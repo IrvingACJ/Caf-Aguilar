@@ -64,7 +64,9 @@ namespace MVCTemplate
                 "~/Content/pages/css/pages-icons.css",
                 "~/Content/pages/css/pages.css",
                 "~/Content/custom/styles.css",
-                "~/Content/assets/plugins/jquery-dynatree/skin/ui.dynatree.css"
+                "~/Content/assets/plugins/jquery-dynatree/skin/ui.dynatree.css",
+                "~/Content/assets/plugins/ion-slider/css/ion.rangeSlider.css",
+                "~/Content/assets/plugins/ion-slider/css/ion.rangeSlider.skinFlat.css"
                 ));
 
             var bundle = new Bundle("~/Scripts/plugins");
@@ -81,7 +83,8 @@ namespace MVCTemplate
                 "~/Content/assets/plugins/jquery-validation/js/jquery.validate.min.js",
                 "~/Content/datatables/datatables.min.js",
                 "~/Content/assets/plugins/jquery-dynatree/jquery.dynatree.min.js",
-                "~/Content/assets/plugins/classie/classie.js"
+                "~/Content/assets/plugins/classie/classie.js",
+                "~/Content/assets/plugins/ion-slider/js/ion.rangeSlider.min.js"
                 );
             bundles.Add(bundle);
 
